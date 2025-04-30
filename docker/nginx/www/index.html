@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raspberry Pi Homelab</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 50px;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        h1 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+        h2 {
+            color: #3498db;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+        .service-card {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .service-card h3 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .service-card a {
+            display: inline-block;
+            margin-top: 15px;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .service-card a:hover {
+            text-decoration: underline;
+        }
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 20px;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Raspberry Pi Homelab</h1>
+            <p>Welcome to your self-hosted Raspberry Pi Homelab Dashboard</p>
+        </header>
+        
+        <section>
+            <h2>Services</h2>
+            <div class="service-grid">
+                <div class="service-card">
+                    <h3>Pi-hole</h3>
+                    <p>Network-wide ad blocking solution that protects your devices from unwanted content.</p>
+                    <a href="http://pihole.local" target="_blank">Open Pi-hole Admin</a>
+                </div>
+                
+                <div class="service-card">
+                    <h3>Portainer</h3>
+                    <p>Docker container management interface that makes it easy to manage your Docker environment.</p>
+                    <a href="http://portainer.local" target="_blank">Open Portainer</a>
+                </div>
+                
+                <div class="service-card">
+                    <h3>OpenSpeedTest</h3>
+                    <p>Network speed test tool to measure your internet connection and local network performance.</p>
+                    <a href="http://speedtest.local" target="_blank">Run Speed Test</a>
+                </div>
+                
+                <div class="service-card">
+                    <h3>System Status</h3>
+                    <p>Check the current status and performance of your Raspberry Pi.</p>
+                    <a href="#" onclick="alert('System monitoring not configured yet.')">View Status</a>
+                </div>
+                
+                <div class="service-card">
+                    <h3>Documentation</h3>
+                    <p>Access guides and documentation for your homelab setup.</p>
+                    <a href="#" onclick="alert('Documentation not available yet.')">View Docs</a>
+                </div>
+            </div>
+        </section>
+        
+        <section>
+            <h2>Quick Setup</h2>
+            <p>To add more services to your homelab, modify the docker-compose.yml file and restart the containers.</p>
+            <p>For detailed setup instructions, refer to the README.md file in the project repository.</p>
+        </section>
+        
+        <footer>
+            <p>Raspberry Pi Homelab Template &copy; 2025</p>
+        </footer>
+    </div>
+</body>
+</html>

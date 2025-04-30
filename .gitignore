@@ -1,0 +1,36 @@
+# Environment variables
+.env
+*.env
+
+# Docker volumes
+volumes/
+
+# Logs
+*.log
+logs/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Node modules (if any)
+node_modules/
+
+# Python virtual environments (if any)
+venv/
+env/
+__pycache__/
+*.pyc
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
+
+# Other sensitive directories
+volumes/
