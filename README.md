@@ -8,7 +8,8 @@ This template provides a foundation for setting up a Raspberry Pi as a homelab s
 
 - Sequential setup scripts for easy installation and configuration
 - Ready-to-use Docker Compose configuration for multiple services
-- Modular Nginx configuration with separate files for each service
+- Modular Nginx configuration with separate files for each service (optional)
+- Cloudflare Tunnel support for secure remote access (alternative to Nginx)
 - Documentation to help you get started and troubleshoot common issues
 
 ## Prerequisites
@@ -62,7 +63,7 @@ raspberry-pi-homelab-template/
 │   ├── docker-compose.yml - Main compose file
 │   ├── pihole/ - Pi-hole configuration
 │   │   └── config/ - Pi-hole config files
-│   └── nginx/ - Nginx configuration
+│   └── nginx/ - Nginx configuration (optional)
 │       ├── conf.d/ - Service configurations
 │       │   ├── default.conf - Base configuration
 │       │   ├── pihole.conf - Pi-hole proxy settings
@@ -80,8 +81,11 @@ raspberry-pi-homelab-template/
 ### Pi-hole
 Pi-hole provides network-wide ad blocking by acting as a DNS sinkhole. Access it through the web interface at `/pihole`.
 
-### Nginx
-Nginx serves as a reverse proxy, allowing you to access multiple services through clean URLs. Each service has its own configuration file for easy management.
+### Nginx (Optional)
+Nginx serves as a reverse proxy, allowing you to access multiple services through clean URLs. Each service has its own configuration file for easy management. This is commented out by default in favor of Cloudflare Tunnel.
+
+### Cloudflare Tunnel
+Cloudflare Tunnel provides secure remote access to your homelab services without exposing ports publicly. It creates encrypted tunnels to Cloudflare's edge network.
 
 ### Portainer
 Portainer provides a web interface for managing Docker containers, images, and volumes. Access it at `/portainer`.

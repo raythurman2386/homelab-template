@@ -85,19 +85,32 @@ Before you begin, ensure you have:
 
 4. Access Pi-hole admin interface at `http://your-pi-ip:8080/admin`
 
-### Nginx Configuration
+### Nginx Configuration (Optional)
 
-1. The template includes a basic Nginx configuration to get you started
-2. You can modify the configuration files in `docker/nginx/conf.d/`
-3. To add a new site configuration, create a file in the conf.d directory:
+The template includes a basic Nginx configuration commented out in docker-compose.yml. If you prefer to use Nginx as a reverse proxy instead of Cloudflare Tunnel:
+
+1. Uncomment the nginx service in `docker-compose.yml`
+2. The template includes a basic Nginx configuration to get you started
+3. You can modify the configuration files in `docker/nginx/conf.d/`
+4. To add a new site configuration, create a file in the conf.d directory:
    ```bash
    nano docker/nginx/conf.d/mysite.conf
    ```
 
-4. After making changes, restart Nginx:
+5. After making changes, restart Nginx:
    ```bash
    docker restart nginx
    ```
+
+### Cloudflare Tunnel Setup (Recommended)
+
+For secure remote access, this template uses Cloudflare Tunnel by default:
+
+1. Set up a Cloudflare account and domain
+2. Create a tunnel and get the token
+3. Set the `TUNNEL_TOKEN` environment variable
+4. Configure your domain DNS records to point to the tunnel
+5. Access your services via `https://service.yourdomain.com`
 
 ## Setting Up a Static IP (Recommended)
 
@@ -123,9 +136,10 @@ For a homelab server, it's recommended to use a static IP address:
 
 ## Accessing Your Homelab
 
-- Pi-hole admin: `http://your-pi-ip:8080/admin`
-- Nginx default page: `http://your-pi-ip`
-- Pi-hole through Nginx: `http://your-pi-ip/pihole/`
+- Pi-hole admin: `http://your-pi-ip:8080/admin` or `https://pihole.yourdomain.com` (with Cloudflare)
+- Portainer: `http://your-pi-ip:9000` or `https://portainer.yourdomain.com` (with Cloudflare)
+- OpenSpeedTest: `http://your-pi-ip:3000` or `https://speedtest.yourdomain.com` (with Cloudflare)
+- Nginx default page: `http://your-pi-ip` (if using Nginx instead of Cloudflare)
 
 ## Next Steps
 

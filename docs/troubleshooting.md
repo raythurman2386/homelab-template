@@ -144,7 +144,7 @@ This guide covers common issues you might encounter with your Raspberry Pi homel
 3. Try re-imaging the SD card with Raspberry Pi OS
 4. Check HDMI connection and try an alternative display
 
-## Nginx Issues
+## Nginx Issues (If Using Nginx)
 
 ### 502 Bad Gateway Error
 
@@ -172,7 +172,43 @@ This guide covers common issues you might encounter with your Raspberry Pi homel
    docker network inspect homelab
    ```
 
-### SSL Certificate Issues
+## Cloudflare Tunnel Issues
+
+### Tunnel Not Connecting
+
+**Symptoms:** Cloudflare tunnel fails to start or connect.
+
+**Solutions:**
+
+1. Check tunnel token:
+   ```bash
+   echo $TUNNEL_TOKEN
+   ```
+
+2. Verify tunnel credentials:
+   ```bash
+   docker logs cloudflare-tunnel
+   ```
+
+3. Check Cloudflare dashboard for tunnel status
+4. Ensure your domain DNS is configured correctly
+
+### Services Not Accessible via Cloudflare
+
+**Symptoms:** Services work locally but not through Cloudflare domain.
+
+**Solutions:**
+
+1. Check tunnel logs:
+   ```bash
+   docker logs cloudflare-tunnel
+   ```
+
+2. Verify DNS records in Cloudflare dashboard
+3. Ensure tunnel configuration matches your services
+4. Check if services are running on correct ports
+
+### SSL Certificate Issues (If Using Nginx)
 
 **Symptoms:** SSL warnings or errors in browser.
 
@@ -197,6 +233,8 @@ This guide covers common issues you might encounter with your Raspberry Pi homel
    ```bash
    certbot renew
    ```
+
+**Note:** If using Cloudflare Tunnel, SSL is handled automatically by Cloudflare.
 
 ## Backup and Recovery
 
@@ -225,7 +263,7 @@ If you encounter issues not covered in this guide:
 1. Check the project's GitHub issue tracker
 2. Search the Raspberry Pi forums
 3. Check Docker documentation for container-specific issues
-4. Check Pi-hole and Nginx documentation for service-specific issues
+4. Check Pi-hole, Nginx (if used), or Cloudflare documentation for service-specific issues
 
 Remember to provide detailed information when seeking help, including:
 - Error messages
