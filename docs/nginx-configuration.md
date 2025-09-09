@@ -1,6 +1,6 @@
 # Nginx Configuration Guide
 
-This guide explains how to organize and scale your Nginx configurations for multiple services in your Raspberry Pi homelab.
+This guide explains how to organize and scale your Nginx configurations for multiple services in your Raspberry Pi homelab. **Note:** This template uses Cloudflare Tunnel by default for reverse proxy functionality. Nginx is provided as an optional alternative.
 
 ## Configuration Structure
 
@@ -9,6 +9,16 @@ The Nginx configuration in this template follows a modular approach:
 - **Main Configuration**: `nginx.conf` contains global settings
 - **Service Configurations**: Individual `.conf` files in `conf.d/` directory
 - **Default Site**: `default.conf` serves as the fallback site
+
+## When to Use Nginx vs Cloudflare Tunnel
+
+- **Use Nginx** if you want full control over your reverse proxy and prefer local network access
+- **Use Cloudflare Tunnel** (default) for secure remote access without exposing ports publicly
+
+To switch to Nginx:
+1. Comment out the `cloudflared` service in `docker-compose.yml`
+2. Uncomment the `nginx` service in `docker-compose.yml`
+3. Configure your DNS or hosts file for local access
 
 ## How It Works
 

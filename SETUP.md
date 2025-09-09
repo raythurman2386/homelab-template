@@ -53,7 +53,7 @@ After installation, you may need to log out and log back in for the group settin
 
 ### Step 4: Start Services
 
-This step starts all the homelab services (Pi-hole, Nginx, Portainer, OpenSpeedTest).
+This step starts all the homelab services (Pi-hole, Cloudflare Tunnel, Portainer, OpenSpeedTest).
 
 ```bash
 sudo chmod +x scripts/Step_4_Start_Services.sh
@@ -80,22 +80,17 @@ You can then use commands like:
 
 After completing these steps, you can access your services at:
 
-| Service | Direct URL | Nginx URL | Description |
-|---------|------------|-----------|-------------|
-| Pi-hole | http://your-pi-ip:8080/admin | http://pihole.local | Network-wide ad blocker |
-| Portainer | http://your-pi-ip:9000 | http://portainer.local | Docker management |
-| OpenSpeedTest | http://your-pi-ip:3000 | http://speedtest.local | Network speed testing |
-| Dashboard | http://your-pi-ip | http://your-pi-ip | Main dashboard |
+| Service | Direct URL | Cloudflare URL | Description |
+|---------|------------|----------------|-------------|
+| Pi-hole | http://your-pi-ip:8080/admin | https://pihole.yourdomain.com | Network-wide ad blocker |
+| Portainer | http://your-pi-ip:9000 | https://portainer.yourdomain.com | Docker management |
+| OpenSpeedTest | http://your-pi-ip:3000 | https://speedtest.yourdomain.com | Network speed testing |
+| Dashboard | http://your-pi-ip | https://homelab.yourdomain.com | Main dashboard |
 
 Notes:
 - Replace `your-pi-ip` with your Raspberry Pi's IP address
-- The Nginx URLs require either:
-  1. Setting up local DNS entries in your router for `.local` domains, or
-  2. Adding entries to your computer's hosts file
-- If you haven't set up DNS, you can also use path-based access:
-  - Pi-hole: http://your-pi-ip/pihole/
-  - Portainer: http://your-pi-ip/portainer/
-  - OpenSpeedTest: http://your-pi-ip/speedtest/
+- The Cloudflare URLs require setting up a Cloudflare Tunnel (see below)
+- If using Nginx instead, uncomment the nginx service in docker-compose.yml and configure accordingly
 
 ## Troubleshooting
 
@@ -106,13 +101,28 @@ If you encounter any issues:
 3. Check service status with `check_services` from the utilities script
 4. See the detailed troubleshooting guide in the `docs/troubleshooting.md` file
 
-## Next Steps
+## Setting Up Cloudflare Tunnel (Recommended)
 
-Now that your basic homelab is set up, consider:
+For secure remote access without exposing ports publicly:
 
-1. Changing default passwords (especially for Pi-hole)
-2. Setting up HTTPS for more security
-3. Adding more services to your homelab
-4. Creating regular backups of your configuration
-
-For more information, see the README.md and documentation in the docs/ directory.
+1. Create a Cloudflare account and add your domain
+2. Install cloudflared locally: `curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb && sudo dpkg -i cloudflared.deb`
+3. Login to Cloudflare: `cloudflared tunnel login`
+4. Create a tunnel: `cloudflared tunnel create homelab-tunnel`
+5. Create a config file:
+   ```yaml
+   tunnel: homelab-tunnel
+   credentials-file: /root/.cloudflared/homelab-tunnel.json
+   
+   ingress:
+     - hostname: pihole.yourdomain.com
+       service: http://pihole:80
+     - hostname: portainer.yourdomain.com
+       service: http://portainer:9000
+     - hostname: speedtest.yourdomain.com
+       service: http://openspeedtest:3000
+     - service: http_status:404
+   ```
+6. Get the tunnel token: `cloudflared tunnel token homelab-tunnel`
+7. Set the TUNNEL_TOKEN environment variable in your docker-compose.yml
+8. Start the services: `docker compose up -d`
