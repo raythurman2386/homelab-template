@@ -1,23 +1,21 @@
-version: '3'
-
 services:
   # Pi-hole service for network-wide ad blocking
   pihole:
     container_name: pihole
     image: pihole/pihole:latest
-    ports:
-      - "53:53/tcp"
-      - "53:53/udp"
-      - "8080:80/tcp"  # Web interface
     environment:
       - TZ='America/New_York'  # Change to your timezone
-      - WEBPASSWORD='raspberry'  # Change this to a secure password!
-      - ServerIP='192.168.1.100'  # Change to your Pi's IP address
+      - WEBPASSWORD=${PIHOLE_PASSWORD}  # Change this to a secure password!
+      - ServerIP=${SERVER_IP}  # Using actual host IP from .env
       - FTLCONF_dns_listeningMode=all # Needed for running in Docker with Nginx and Pihole
       # Optional DNS settings - uncomment and adjust as needed:
-      - DNSMASQ_USER=pihole
-      # - DNS1='1.1.1.1'
-      # - DNS2='1.0.0.1'
+      # - DNSMASQ_USER=${PIHOLE_USER}  # Commented out - causes issues in container
+      - DNS1=${DNS_ONE}
+      - DNS2=${DNS_TWO}
+    ports:
+      - "80:80"      # Web interface
+      - "53:53/tcp"  # DNS TCP
+      - "53:53/udp"  # DNS UDP
     volumes:
       - './pihole/config/:/etc/pihole/'
       - './pihole/dnsmasq.d/:/etc/dnsmasq.d/'
@@ -27,29 +25,14 @@ services:
     cap_add:
       - NET_ADMIN
     restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
     networks:
       - homelab
   
-  # Nginx service for reverse proxy
-  # nginx:
-  #   container_name: nginx
-  #   image: nginx:alpine
-  #   ports:
-  #     - "80:80"
-  #     - "443:443"
-  #   volumes:
-  #     - './nginx/nginx.conf:/etc/nginx/nginx.conf:ro'
-  #     - './nginx/conf.d/:/etc/nginx/conf.d/:ro'
-  #     # Uncomment for SSL certificates
-  #     # - './nginx/ssl/:/etc/nginx/ssl/:ro'
-  #     - './nginx/www/:/usr/share/nginx/html/'
-  #   depends_on:
-  #     - pihole
-  #   restart: unless-stopped
-  #   networks:
-  #     - homelab
-  # I commented out nginx because I'm using cloudflared for tunneling
-  # You can uncomment and configure it if you prefer to use nginx as a reverse proxy
   cloudflared:
     image: cloudflare/cloudflared:latest
     container_name: cloudflare-tunnel
@@ -57,32 +40,28 @@ services:
     command: tunnel --no-autoupdate run --token ${TUNNEL_TOKEN}
     environment:
       - TUNNEL_TOKEN=${TUNNEL_TOKEN}
-    networks:
-      - homelab
-
-  portainer:
-    image: portainer/portainer-ce
-    container_name: portainer
-    ports:
-      - "9000:9000"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - portainer_data:/data
-    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '256M'
     networks:
       - homelab
 
   openspeedtest:
     image: openspeedtest/latest
+    container_name: openspeedtest
     restart: unless-stopped
     ports:
-      - "3000:3000"
-      - "3001:3001"
+      - "3010:3000"
+      - "3011:3001"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: '512M'
     networks:
       - homelab
-
-volumes:
-  portainer_data:
 
 networks:
   homelab:

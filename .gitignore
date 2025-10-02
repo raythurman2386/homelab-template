@@ -34,3 +34,4 @@ __pycache__/
 
 # Other sensitive directories
 volumes/
+pihole/
