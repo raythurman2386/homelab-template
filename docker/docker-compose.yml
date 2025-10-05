@@ -13,7 +13,6 @@ services:
       - DNS1=${DNS_ONE}
       - DNS2=${DNS_TWO}
     ports:
-      - "80:80"      # Web interface
       - "53:53/tcp"  # DNS TCP
       - "53:53/udp"  # DNS UDP
     volumes:
